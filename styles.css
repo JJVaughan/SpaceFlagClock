@@ -1,0 +1,57 @@
+body {
+    background-color: #d9e2ee;
+    font-family: Arial, sans-serif;
+}
+
+#title {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 32px;
+}
+
+#clock {
+    font-size: 250pt;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 50px;
+}
+
+#userEntryFields {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.buttons {
+    margin: 0 10px;
+}
+
+#speedInput {
+    width: 50px;
+}
+
+#startingTime {
+    margin-right: 15px;
+}
+
+#startHourInput, #startMinuteInput, #startSecondInput {
+    width: 50px;
+    margin: 0 5px;
+}
+
+#buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#adminLogin {
+    text-align: center;
+    margin-top: 50px;
+}
+
+#loginMessage {
+    color: red;
+}

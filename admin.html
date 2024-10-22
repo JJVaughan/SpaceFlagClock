@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Clock Control</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="title">Admin-Controlled Clock</div>
+
+    <!-- Admin Login Form -->
+    <div id="adminLogin">
+        <h2>Admin Login</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username">
+        <label for="password">Password:</label>
+        <input type="password" id="password">
+        <button id="loginBtn">Login</button>
+        <p id="loginMessage"></p>
+    </div>
+
+    <!-- Clock and Admin Controls -->
+    <div id="clockContainer" style="display: none;">
+        <div id="clock">00:00:00</div>
+        <div id="userEntryFields">
+            <div id="startingTime">
+                <label for="startHourInput">Starting Time:</label>
+                <input type="number" id="startHourInput" value="0" min="0" max="23"> Hour
+                <input type="number" id="startMinuteInput" value="0" min="0" max="59"> Minute
+                <input type="number" id="startSecondInput" value="0" min="0" max="59"> Second
+            </div>
+            <div id="speedControl">
+                <label for="speedInput">Speed:</label>
+                <input type="number" id="speedInput" value="1" min="1" max="10"> x
+            </div>
+        </div>
+        <div id="buttons">
+            <button class="buttons" id="startBtn">Start Clock</button>
+            <button class="buttons" id="pauseBtn">Pause Clock</button>
+            <button class="buttons" id="resetBtn">Reset Clock</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="admin-script.js"></script>
+</body>
+</html>
