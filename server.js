@@ -7,7 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-// Initial clock state, controlled by admin
+// Initial clock state, controlled by the server
 let clockState = {
   hours: 0,
   minutes: 0,
@@ -15,6 +15,8 @@ let clockState = {
   running: false,
   speed: 1 // Default multiplier is 1x
 };
+
+let clockInterval; // Interval for the server-side clock
 
 // Serve static files (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname)));
@@ -29,6 +31,32 @@ app.get('/user', (req, res) => {
   res.sendFile(path.join(__dirname, 'user.html'));
 });
 
+// Function to start the clock on the server
+function startClock() {
+  if (clockInterval) return; // Don't start if it's already running
+
+  clockInterval = setInterval(() => {
+    clockState.seconds += 1;
+    if (clockState.seconds === 60) {
+      clockState.seconds = 0;
+      clockState.minutes += 1;
+      if (clockState.minutes === 60) {
+        clockState.minutes = 0;
+        clockState.hours += 1;
+        if (clockState.hours === 24) clockState.hours = 0;
+      }
+    }
+    // Broadcast the updated clock state to all connected clients
+    io.emit('clockState', clockState);
+  }, 1000 / clockState.speed); // Adjust for speed multiplier
+}
+
+// Function to stop the clock on the server
+function stopClock() {
+  clearInterval(clockInterval);
+  clockInterval = null;
+}
+
 // Handle WebSocket connections
 io.on('connection', (socket) => {
   console.log('New client connected');
@@ -39,7 +67,16 @@ io.on('connection', (socket) => {
   // Handle updates from the admin
   socket.on('updateClock', (newState) => {
     clockState = newState; // Update the clock state on the server
-    io.emit('clockState', clockState); // Broadcast the updated state to all clients
+
+    // Start or stop the clock based on the updated state
+    if (clockState.running) {
+      startClock();
+    } else {
+      stopClock();
+    }
+
+    // Broadcast the updated state to all clients
+    io.emit('clockState', clockState);
   });
 
   socket.on('disconnect', () => {

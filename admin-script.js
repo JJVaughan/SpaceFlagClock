@@ -12,15 +12,20 @@ const loginMessage = document.getElementById('loginMessage');
 const clockContainer = document.getElementById('clockContainer');
 const clockDisplay = document.getElementById('clock');
 
-// Clock variables
-let clockInterval;
+// Clock state, now controlled by the server
 let clockState = {
   hours: 0,
   minutes: 0,
   seconds: 0,
   running: false,
-  speed: 1 // Default speed multiplier is 1x
+  speed: 1 // Default speed is 1x
 };
+
+// Listen for clock updates from the server
+socket.on('clockState', (newState) => {
+  clockState = newState;
+  updateClockDisplay();
+});
 
 // Login function for admin
 loginBtn.addEventListener('click', () => {
@@ -31,7 +36,6 @@ loginBtn.addEventListener('click', () => {
     loginMessage.textContent = "";
     clockContainer.style.display = "block"; // Show clock and controls
     document.getElementById('adminLogin').style.display = "none"; // Hide login form
-    socket.emit('updateClock', clockState); // Sync clock state with the server
   } else {
     loginMessage.textContent = "Invalid username or password.";
   }
@@ -41,23 +45,16 @@ loginBtn.addEventListener('click', () => {
 document.getElementById('startBtn').addEventListener('click', () => {
   if (!clockState.running) {
     clockState.running = true;
-    startClockInterval();
     socket.emit('updateClock', clockState); // Send clock state to server
   }
 });
 
 document.getElementById('pauseBtn').addEventListener('click', () => {
   clockState.running = !clockState.running;
-  if (clockState.running) {
-    startClockInterval();
-  } else {
-    clearInterval(clockInterval);
-  }
   socket.emit('updateClock', clockState); // Send clock state to server
 });
 
 document.getElementById('resetBtn').addEventListener('click', () => {
-  clearInterval(clockInterval);
   clockState = {
     hours: parseInt(document.getElementById('startHourInput').value),
     minutes: parseInt(document.getElementById('startMinuteInput').value),
@@ -65,8 +62,8 @@ document.getElementById('resetBtn').addEventListener('click', () => {
     running: false,
     speed: parseInt(document.getElementById('speedInput').value)
   };
-  updateClockDisplay();
   socket.emit('updateClock', clockState); // Send clock state to server
+  updateClockDisplay();
 });
 
 document.getElementById('speedInput').addEventListener('input', () => {
@@ -74,26 +71,7 @@ document.getElementById('speedInput').addEventListener('input', () => {
   socket.emit('updateClock', clockState); // Send clock state to server
 });
 
-// Start clock interval based on speed multiplier
-function startClockInterval() {
-  clearInterval(clockInterval);
-  clockInterval = setInterval(() => {
-    clockState.seconds += 1;
-    if (clockState.seconds === 60) {
-      clockState.seconds = 0;
-      clockState.minutes += 1;
-      if (clockState.minutes === 60) {
-        clockState.minutes = 0;
-        clockState.hours += 1;
-        if (clockState.hours === 24) clockState.hours = 0;
-      }
-    }
-    updateClockDisplay();
-    socket.emit('updateClock', clockState); // Sync updated clock state with server
-  }, 1000 / clockState.speed); // Adjust for speed multiplier
-}
-
-// Display the clock
+// Function to update the clock display
 function updateClockDisplay() {
   clockDisplay.textContent = `${String(clockState.hours).padStart(2, '0')}:${String(clockState.minutes).padStart(2, '0')}:${String(clockState.seconds).padStart(2, '0')}`;
 }
