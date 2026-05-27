@@ -2,14 +2,23 @@ Proprietary License
 
 Copyright (c) 2026 Joshua Vaughan. All rights reserved.
 
-This source code and associated materials are proprietary to Joshua Vaughan.
+Except for third-party materials that are expressly identified in this
+repository and remain governed by their own license terms, the original source
+code, documentation, configuration, notes, and other original materials in this
+repository are proprietary to Joshua Vaughan.
+
 No permission is granted to copy, modify, distribute, sublicense, publish,
-commercialize, or use this software except with prior written permission from
+publicly display, publicly perform, commercialize, or use this repository or
+Joshua Vaughan's original materials except with prior written permission from
 Joshua Vaughan.
 
 No public, open-source, or implied license is granted by making this repository
 available on GitHub. Any rights not expressly granted in writing are reserved.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+Nothing in this license supersedes or restricts any rights that a third-party
+licensor has expressly granted under that third party's own license for their
+own materials.
+
+THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
